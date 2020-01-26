@@ -14,7 +14,8 @@ function loadingEventlisteners() {
     shoppingCart.addEventListener('click', removeCourse);
     // When the clear shopping cart button is clicked
     clearShopping.addEventListener('click', clearShoppingCart);
-
+    // After the DOM is loaded, print LS value
+    document.addEventListener('DOMContentLoaded', printLS);
 };
 
 // Functions
@@ -103,4 +104,28 @@ function getLocalStorage() {
         coursesLS = JSON.parse(localStorage.getItem('courses'));
     }
     return coursesLS;
+}
+
+// Print LS value
+function printLS() {
+    let coursesLS;
+    coursesLS = getLocalStorage();
+
+    coursesLS.forEach(function(course) {
+        // Creating tr for every course added
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>
+                <img src="${course.image}" width="100px">
+            </td>
+            <td>${course.title}</td>
+            <td>${course.price}</td>
+            <td>
+                <a href="#" class="borrar-curso" data-id="${course.id}">X</a>
+            </td>
+        `;
+        // Add  the const row as a child of tbody
+        courseList.appendChild(row);
+    });
+     
 }
