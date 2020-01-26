@@ -9,6 +9,8 @@ loadingEventlisteners();
 function loadingEventlisteners() {
     // It's triggered when the add to shopping cart button is clicked
     course.addEventListener('click', buyCourse);
+    // When the remove button is clicked
+    shoppingCart.addEventListener('click', removeCourse);
 };
 
 // Functions
@@ -34,6 +36,7 @@ function readCourseData(course) {
     }
     insertShoppingCart(courseInfo);
 }
+
 // Function to create the html with the course data
 // and add it to the shopping cart list
 function insertShoppingCart(course) {
@@ -50,4 +53,12 @@ function insertShoppingCart(course) {
     `;
     // Add as a child of the tbody the const row
     courseList.appendChild(row);
+}
+
+// Remove course from the shopping cart list (DOM) 
+function removeCourse(e) {
+    e.preventDefault();
+    if(e.target.classList.contains('borrar-curso')) {
+        e.target.parentElement.parentElement.remove();
+    }
 }
