@@ -2,6 +2,7 @@
 const shoppingCart = document.getElementById('carrito');
 const course = document.getElementById('lista-cursos');
 const courseList = document.querySelector('#lista-carrito tbody');
+const clearShopping = document.getElementById('vaciar-carrito');
 
 // Listeners
 loadingEventlisteners();
@@ -11,6 +12,9 @@ function loadingEventlisteners() {
     course.addEventListener('click', buyCourse);
     // When the remove button is clicked
     shoppingCart.addEventListener('click', removeCourse);
+    // When the clear shopping cart button is clicked
+    clearShopping.addEventListener('click', clearShoppingCart);
+
 };
 
 // Functions
@@ -53,6 +57,8 @@ function insertShoppingCart(course) {
     `;
     // Add as a child of the tbody the const row
     courseList.appendChild(row);
+    // Calling function to store in LocalStorage
+    storeInLocalStorage(course);
 }
 
 // Remove course from the shopping cart list (DOM) 
@@ -61,4 +67,40 @@ function removeCourse(e) {
     if(e.target.classList.contains('borrar-curso')) {
         e.target.parentElement.parentElement.remove();
     }
+}
+
+// Clear the entire shopping cart list
+function clearShoppingCart() {
+    while(courseList.firstChild) {
+        courseList.removeChild(courseList.firstChild);
+    }
+    return false;
+}
+
+// Store in LocalStorage
+function storeInLocalStorage(course) {
+    let courses;
+    // The variable takes the value of an empty array 
+    // or an array with the values stored in LocalStorage
+    courses = getLocalStorage();
+    // Selected element is added to the array
+    courses.push(course);
+    // After adding the element to the array
+    // update the LS content (as string) to not just overwrite
+    localStorage.setItem('courses', JSON.stringify(courses));
+}
+
+// Get elements from LocalStorage
+function getLocalStorage() {
+    let coursesLS;
+    // If LS is empty
+    if (localStorage.getItem('courses') === null) {
+        // The variable takes the value of an empty array
+        coursesLS = [];
+        // If not
+    }else {
+        // Takes the value of LS as an array
+        coursesLS = JSON.parse(localStorage.getItem('courses'));
+    }
+    return coursesLS;
 }
