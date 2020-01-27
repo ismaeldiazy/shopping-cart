@@ -65,9 +65,13 @@ function insertShoppingCart(course) {
 // Remove course from the shopping cart list (DOM) 
 function removeCourse(e) {
     e.preventDefault();
+    let course, courseId;
     if(e.target.classList.contains('borrar-curso')) {
         e.target.parentElement.parentElement.remove();
+        course = e.target.parentElement.parentElement
+        courseId = course.querySelector('a').getAttribute('data-id');
     }
+    removeCourseFromLS(courseId);
 }
 
 // Clear the entire shopping cart list
@@ -75,7 +79,9 @@ function clearShoppingCart() {
     while(courseList.firstChild) {
         courseList.removeChild(courseList.firstChild);
     }
-    return false;
+    // Calling function to clear stored values in LS
+    clearLocalStorage();
+    return false;   
 }
 
 // Store in LocalStorage
@@ -126,6 +132,26 @@ function printLS() {
         `;
         // Add  the const row as a child of tbody
         courseList.appendChild(row);
+    });    
+}
+
+// Remove course from LS by course id
+function removeCourseFromLS(course) {
+    let coursesLS;
+    // Give courseLS LS values
+    coursesLS = getLocalStorage();
+
+    coursesLS.forEach(function(courseLS, index) {
+        if(courseLS.id === course) {
+            coursesLS.splice(index, 1);
+        }
     });
-     
+    // Update the LS values
+    localStorage.setItem('courses', JSON.stringify(coursesLS));
+
+};
+
+// Clear LS
+function clearLocalStorage() {
+    localStorage.clear();
 }
